@@ -38,7 +38,7 @@
         </tr>
         <tr>
             <td width="200px"><i>false</td>
-            <td>\ x y. y</td>
+            <td>false = \ x y. y</td>
         </tr>
         <tr>
             <td width="200px">if <i>c</i> then <i>x</i> else <i>y</td>
