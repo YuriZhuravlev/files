@@ -263,7 +263,7 @@
             <td>bEmpty = \t . t (\h l r. false) true</td>
         </tr>
         <tr>
-            <td width="200px">Проверки симметричности дерева</td>
+            <td width="200px">Проверка симметричности дерева</td>
             <td>bExtract = \ f t . \t. second (t
                       (\ h l r. pair
                                     (btree h (first l) (first r))
