@@ -123,7 +123,7 @@
             <td>"=" = \ n m. if ( ("<=" n m) and (">=" n m))</td>
         </tr>
         <tr>
-            <td width="200px">Пустотой список</td>
+            <td width="200px">Пустой список</td>
             <td>empty = \ f x. x</td>
         </tr>
         <tr>
@@ -157,6 +157,155 @@
         <tr>
             <td width="200px">Реверсирование списка</td>
             <td>reverse = \ l. l push_back empty</td>
+        </tr>
+    </table>
+</p>
+
+## ДЗ6
+<p>
+    <table>
+        <tr>
+            <td width="200px">Получение последнего элемента списка</td>
+            <td>findLast = \ l . l
+                (\ h p. if (second p)
+                            p
+                            (pair h true)
+                )
+                (pair 0 false)</td>
+        </tr>
+        <tr>
+            <td width="200px">Поиска k-ого элемента списка</td>
+            <td>findByIndex = \ l n. if (isEmpty l)
+                        (pair 0 false)
+                        (if ("=" n 1)
+                            (pair (head l) true)
+                            (findByIndex (tail l) (pre n))
+                        )</td>
+        </tr>
+        <tr>
+            <td width="200px">Проверка, что списки равны</td>
+            <td>listEquals = \ l m. if (or (isEmpty l) (isEmpty m))
+                       (and (isEmpty l) (isEmpty m))
+                       (if ("=" (head l) (head m))
+                           (listEquals (tail l) (tail m))
+                           false
+                       )</td>
+        </tr>
+        <tr>
+            <td width="200px">Проверка, что список является палиндромом</td>
+            <td>palindrom = \ l . listEquals l (reverse l)</td>
+        </tr>
+        <tr>
+            <td width="200px">Таблица истинности бинарной функции</td>
+            <td>truth_table_2 =
+\f. [ list
+          (list true (list true (list (f true true) empty)))
+          [ list
+                (list true (list false (list (f true false) empty)))
+                [ list
+                      (list false (list true (list (f false true) empty)))
+                      [ list
+                            (list false (list false (list (f false false) empty)))
+                            empty
+                      ]
+                ]
+          ]
+    ]</td>
+        </tr>
+        <tr>
+            <td width="200px">Таблица истинности</td>
+            <td>truth_table_n = \f n. if (isZero n)
+                         # если n = 0, значит мы подставили все аргументы
+                         # в исходную функцию, а f -- булевое значение.
+                         (list f empty)
+                         # иначе получим части таблицы истинности
+                         # где первая переменная либо true, либо false
+                         # и соединим эти части в одну таблицу
+                         (append
+                           [truth_table_iteration f n true]
+                           [truth_table_iteration f n false]
+                         )</td>
+        </tr>
+        <tr>
+            <td width="200px">Вспомогательная функция строит часть таблицы истинности для конкретного значения одной переменной</td>
+            <td>truth_table_iteration = \ f n b. add_first_to_elemets
+                                            (truth_table_n
+                                               (f b) # подставляем аргумент! (\ x y. and x y) b => \ y. and x b
+                                               (pre n) # уменьшаем оставшееся количество аргументов
+                                            )
+                                            b</td>
+        </tr>
+        <tr>
+            <td width="200px">Вспомогательная фунция, принимает список списков l и элемент e</td>
+            <td>add_first_to_elemets = \ l e. l
+                                # здесь h -- список, к которому нужно приписать элемент e
+                                (\ h t. list (list e h) t)
+                                empty</td>
+        </tr>
+        <tr>
+            <td width="200px">Бинарное дерево</td>
+            <td>btree = \ h l r f x. f h (l f x) (r f x)</td>
+        </tr>
+        <tr>
+            <td width="200px">Рассчёт суммы элементов дерева</td>
+            <td>bsum = \ t . t (\ h l r . plus h (plus l r)) 0</td>
+        </tr>
+        <tr>
+            <td width="200px">Максимум</td>
+            <td>max = \ a b. if (">=" a b) a b</td>
+        </tr>
+        <tr>
+            <td width="200px">Поиск высоты дерева</td>
+            <td>height = \t . t (\h l r. succ (max l r)) 0</td>
+        </tr>
+        <tr>
+            <td width="200px">Пустое поддерево?</td>
+            <td>bEmpty = \t . t (\h l r. false) true</td>
+        </tr>
+        <tr>
+            <td width="200px">Проверки симметричности дерева</td>
+            <td>bExtract = \ f t . \t. second (t
+                      (\ h l r. pair
+                                    (btree h (first l) (first r))
+                                    (f h l r)
+                      )
+                      (pair empty empty)
+                  )</td>
+        </tr>
+        <tr>
+            <td width="200px"></td>
+            <td>left = bExtract (\ h l r. first l)</td>
+        </tr>
+        <tr>
+            <td width="200px"></td>
+            <td>right = bExtract (\ h l r. first r)</td>
+        </tr>
+        <tr>
+            <td width="200px"></td>
+            <td>bHead = bExtract (\ h l r. h)</td>
+        </tr>
+        <tr>
+            <td width="200px"></td>
+            <td>symmetric = \ t . mirror (left t) (right t)</td>
+        </tr>
+        <tr>
+            <td width="200px"></td>
+            <td>mirror = \ a b . if (or (bEmpty a) (bEmpty b))
+                    (and (bEmpty a) (bEmpty b))
+                    (and (isEqual (bHead a) (bHead b))
+                         (and
+                           (mirror (left a) (right b))
+                           (mirror (right a) (left b))
+                         )
+                    )</td>
+        </tr>
+        <tr>
+            <td width="200px">Построение вполне сбалансированного дерева, состоящего из n вершин со значением 0</td>
+            <td>balancedBTree = \ n .  if (isZero n)
+                          empty
+                          if ("=" (mod n 2) 1)
+                             (btree 0 (balancedBTree (div n 2)) (balancedBTree (div n 2)))
+                             (btree 0 (balancedBTree (div n 2)) (balancedBTree (pre (div n 2))))</td>
         </tr>
     </table>
 </p>
